@@ -23,7 +23,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "copy-static": "cp -R public/catalogus.json public/img build/ && cp public/speelotheek-vlieger.png build/"
+
   },
   "eslintConfig": {
     "extends": [
