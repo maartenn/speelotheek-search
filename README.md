@@ -1,46 +1,93 @@
-# Getting Started with Create React App
+# Speelgoed Zoeker (Toy Finder)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## 🚀 Live Demo
 
-## Available Scripts
+> **[Visit the Live Site](https://maartenn.github.io/speelotheek-search/)**
+>
+> Explore the Speelgoed Zoeker now and find the perfect toy!
+>
 
-In the project directory, you can run:
 
-### `npm start`
+## Overview
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Speelgoed Zoeker is a web application designed to help users find and filter toys based on various criteria such as age range, number of players, toy type, developmental goals, and themes. This project is built using React and TypeScript, providing a responsive and user-friendly interface for browsing a toy catalog.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Features
 
-### `npm test`
+- Search functionality to find toys by keywords
+- Filter toys by:
+    - Age range
+    - Number of players
+    - Toy type
+    - Developmental goals
+    - Themes
+- Responsive design for desktop and mobile devices
+- Lazy loading of images for improved performance
+- Detailed view of individual toys
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Getting Started
 
-### `npm run build`
+### Prerequisites
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- Node.js (version 14 or later recommended)
+- npm (comes with Node.js)
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Installation
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+1. Clone the repository:
+   ```
+   git clone https://github.com/maartenn/speelotheek-search.git
+   cd speelotheek-search
+   ```
 
-### `npm run eject`
+2. Install dependencies:
+   ```
+   npm install
+   ```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+3. Start the development server:
+   ```
+   npm start
+   ```
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+4. Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## Building for Production
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+To create a production build:
 
-## Learn More
+```
+npm run build
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+This will create a `build` directory with the production-ready files.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Deployment
+
+This project is set up to deploy automatically to GitHub Pages using GitHub Actions. Any push to the `main` branch will trigger a build and deploy process.
+
+To set up deployment:
+
+1. Ensure your repository is public or you have a GitHub Pro account.
+2. Go to your repository settings and enable GitHub Pages.
+3. Set the source to the `gh-pages` branch.
+
+## Project Structure
+
+- `src/App.tsx`: Main component containing the Toy Finder logic
+- `public/catalogus.json`: JSON file containing the toy data
+- `public/img/`: Directory containing toy images
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## License
+
+This project is open source and available under the [MIT License](LICENSE).
+
+## Acknowledgements
+
+- This project uses [Create React App](https://create-react-app.dev/) as its foundation.
+- Icons provided by [Lucide](https://lucide.dev/).
+- Styling implemented with [Tailwind CSS](https://tailwindcss.com/).
