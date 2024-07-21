@@ -81,7 +81,7 @@ export default function ToyFilterWizard() {
   useEffect(() => {
     const fetchToys = async () => {
       try {
-        const response = await fetch('${process.env.PUBLIC_URL}/catalogus.json');
+        const response = await fetch(`${process.env.PUBLIC_URL}/catalogus.json`);
         const data = await response.json();
         setToys(data);
       } catch (error) {
@@ -217,7 +217,7 @@ export default function ToyFilterWizard() {
                   onClick={() => setSelectedToy(toy)}
               >
                 <LazyImage
-                    src={'${process.env.PUBLIC_URL}/img/${toy.Bestandsnaam}'}
+                    src={`${process.env.PUBLIC_URL}/img/${toy.Bestandsnaam}`}
                     alt={toy.Beschrijving}
                     className="w-full h-48 object-cover"
                 />
@@ -315,7 +315,7 @@ export default function ToyFilterWizard() {
         <div ref={scrollTargetRef}></div>
         <div className="mb-8">
           <div className="flex items-center mb-4">
-            <img src={'${process.env.PUBLIC_URL}/speelotheek-vlieger.png'}
+            <img src={`${process.env.PUBLIC_URL}/speelotheek-vlieger.png`}
                 alt="Speelotheek Vlieger"
                 className="mr-4 h-auto max-h-[150%]"
                 style={{ maxHeight: 'calc(1.5 * 3rem)' }}
