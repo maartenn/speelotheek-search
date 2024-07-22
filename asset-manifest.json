@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/speelotheek-search/static/css/main.47077d9a.css",
-    "main.js": "/speelotheek-search/static/js/main.b423807a.js",
+    "main.js": "/speelotheek-search/static/js/main.fbb1ee0f.js",
     "index.html": "/speelotheek-search/index.html",
     "main.47077d9a.css.map": "/speelotheek-search/static/css/main.47077d9a.css.map",
-    "main.b423807a.js.map": "/speelotheek-search/static/js/main.b423807a.js.map"
+    "main.fbb1ee0f.js.map": "/speelotheek-search/static/js/main.fbb1ee0f.js.map"
   },
   "entrypoints": [
     "static/css/main.47077d9a.css",
-    "static/js/main.b423807a.js"
+    "static/js/main.fbb1ee0f.js"
   ]
 }
