@@ -273,7 +273,7 @@ export default function ToyFilterWizard() {
             </div>
             <div className="p-4">
               <LazyImage
-                  src={`${process.env.PUBLIC_URL}/{toy.Bestandsnaam}`}
+                  src={`${process.env.PUBLIC_URL}/img/${toy.Bestandsnaam}`}
                   alt={toy.Beschrijving}
                   className="w-full h-auto object-contain mb-4"
               />
