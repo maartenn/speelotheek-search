@@ -12,10 +12,12 @@
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "express": "^4.19.2",
+    "framer-motion": "^11.3.8",
     "lucide-react": "^0.408.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-scripts": "5.0.1",
+    "react-tooltip": "^5.27.1",
     "typescript": "^4.9.5",
     "web-vitals": "^2.1.4"
   },
@@ -25,7 +27,6 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "copy-static": "cp -R public/catalogus.json public/img build/ && cp public/speelotheek-vlieger.png build/"
-
   },
   "eslintConfig": {
     "extends": [
