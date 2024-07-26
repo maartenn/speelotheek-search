@@ -89,11 +89,30 @@ export default function ToyFilterWizard() {
     const scrollTargetRef = useRef(null);
 
     // Verplaatst naar het begin van de component
+
     const getAgeValue = (age: string): number => {
-        if (age.includes('jaar en ouder')) {
-            return parseInt(age.split(' ')[0]);
+        const match = age.match(/\d+/);
+        return match ? parseInt(match[0]) : 0;
+    };
+
+    const isAgeInRange = (toyAgeRange: string, selectedAge: string): boolean => {
+        const selectedAgeValue = getAgeValue(selectedAge);
+
+        // Handle ranges like "1-5 jaar", "1-5", "1 tot 5 jaar", etc.
+        if (toyAgeRange.includes('-') || toyAgeRange.toLowerCase().includes('tot')) {
+            const [min, max] = toyAgeRange.split(/[-\s]tot\s|[-\s]/).map(getAgeValue);
+            return selectedAgeValue >= min && selectedAgeValue <= max;
         }
-        return parseInt(age);
+
+        // Handle ranges like "5+", "5 jaar en ouder", etc.
+        if (toyAgeRange.includes('+') || toyAgeRange.toLowerCase().includes('en ouder')) {
+            const minAge = getAgeValue(toyAgeRange);
+            return selectedAgeValue >= minAge;
+        }
+
+        // Handle single ages like "5 jaar", "5", etc.
+        const toyAge = getAgeValue(toyAgeRange);
+        return selectedAgeValue === toyAge;
     };
 
     useEffect(() => {
@@ -110,20 +129,7 @@ export default function ToyFilterWizard() {
         fetchToys();
     }, []);
 
-    const isAgeInRange = (toyAgeRange: string, selectedAge: string): boolean => {
-        const selectedAgeValue = getAgeValue(selectedAge);
 
-        if (toyAgeRange.includes('+')) {
-            const toyMinAge = parseInt(toyAgeRange);
-            return selectedAgeValue >= toyMinAge;
-        } else if (toyAgeRange.includes('-')) {
-            const [min, max] = toyAgeRange.split('-').map(Number);
-            return selectedAgeValue >= min && selectedAgeValue <= max;
-        } else {
-            const toyAge = parseInt(toyAgeRange);
-            return selectedAgeValue === toyAge;
-        }
-    };
 
     const isPlayerCountValid = (toyPlayers: string, selectedPlayers: string): boolean => {
         const toyPlayerCount = parseInt(toyPlayers);
@@ -346,8 +352,7 @@ export default function ToyFilterWizard() {
 
         return (
             <div className="container mx-auto px-4 py-8">
-                <div ref={scrollTargetRef}></div>
-                <div className="mb-8">
+                <div className="sticky top-0 bg-white z-10 pb-4 shadow-md">
                     <div className="flex items-center mb-4">
                         <img src={`${process.env.PUBLIC_URL}/speelotheek-vlieger.png`}
                              alt="Speelotheek Vlieger"
@@ -357,7 +362,7 @@ export default function ToyFilterWizard() {
                         />
                         <h1 className="text-3xl font-bold text-gray-800">Speelgoed Zoeker - Speelotheek de Vlieger</h1>
                     </div>
-                    <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0 md:space-x-4">
+                    <div className="flex justify-between items-center space-x-4">
                         <div className="flex space-x-2">
                             <button
                                 onClick={toggleSearchMode}
@@ -372,8 +377,8 @@ export default function ToyFilterWizard() {
                                 <RefreshCw className="mr-2" /> Reset
                             </button>
                         </div>
-                        {isSearchMode ? (
-                            <div className="relative w-full md:w-1/2">
+                        {isSearchMode && (
+                            <div className="relative flex-grow">
                                 <input
                                     type="text"
                                     value={searchTerm}
@@ -383,38 +388,43 @@ export default function ToyFilterWizard() {
                                 />
                                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
                             </div>
-                        ) : (
-                            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 w-full">
-                                {filterableColumns.map((column) => {
-                                    const Icon = getIconForColumn(column);
-                                    return (
-                                        <div key={column} className="bg-white rounded-lg shadow p-4">
-                                            <h3 className="font-semibold text-gray-700 mb-2 flex items-center">
-                                                <Icon className="mr-2" size={18}/>
-                                                {columnLabels[column]}
-                                            </h3>
-                                            <div className="space-y-2">
-                                                {availableOptions[column] && availableOptions[column].map(option => (
-                                                    <button
-                                                        key={option}
-                                                        onClick={() => handleFilterClick(column, option)}
-                                                        className={`w-full text-left px-2 py-1 rounded ${
-                                                            filters[column] === option
-                                                                ? 'bg-blue-500 text-white'
-                                                                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                                                        } transition-colors duration-200`}
-                                                    >
-                                                        {option}
-                                                    </button>
-                                                ))}
-                                            </div>
-                                        </div>
-                                    );
-                                })}
-                            </div>
                         )}
                     </div>
                 </div>
+
+                <div className="mt-4">
+                    {!isSearchMode && (
+                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                            {filterableColumns.map((column) => {
+                                const Icon = getIconForColumn(column);
+                                return (
+                                    <div key={column} className="bg-white rounded-lg shadow p-4">
+                                        <h3 className="font-semibold text-gray-700 mb-2 flex items-center">
+                                            <Icon className="mr-2" size={18}/>
+                                            {columnLabels[column]}
+                                        </h3>
+                                        <div className="space-y-2">
+                                            {availableOptions[column] && availableOptions[column].map(option => (
+                                                <button
+                                                    key={option}
+                                                    onClick={() => handleFilterClick(column, option)}
+                                                    className={`w-full text-left px-2 py-1 rounded ${
+                                                        filters[column] === option
+                                                            ? 'bg-blue-500 text-white'
+                                                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                                    } transition-colors duration-200`}
+                                                >
+                                                    {option}
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    )}
+                </div>
+
                 <div className="mb-4 text-lg font-semibold text-gray-700">
                     Aantal zoekresultaten: {filteredToys.length}
                 </div>
