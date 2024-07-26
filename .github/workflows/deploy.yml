@@ -17,17 +17,21 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Install minification tools
-        run: npm install -g terser css-minifier html-minifier json-minify
+        run: npm install -g terser clean-css-cli html-minifier-terser
       - name: Build
         run: CI=false npm run build
       - name: Minify JavaScript
         run: find build -type f -name '*.js' -exec terser {} -c -m -o {} \;
       - name: Minify CSS
-        run: find build -type f -name '*.css' -exec css-minifier -i {} -o {} \;
+        run: find build -type f -name '*.css' -exec cleancss -o {} {} \;
       - name: Minify HTML
-        run: find build -type f -name '*.html' -exec html-minifier --collapse-whitespace --remove-comments --remove-optional-tags --remove-redundant-attributes --remove-script-type-attributes --remove-tag-whitespace --use-short-doctype --minify-css true --minify-js true -o {} {} \;
+        run: find build -type f -name '*.html' -exec html-minifier-terser --collapse-whitespace --remove-comments --remove-optional-tags --remove-redundant-attributes --remove-script-type-attributes --remove-tag-whitespace --use-short-doctype --minify-css true --minify-js true -o {} {} \;
       - name: Minify JSON
-        run: find build -type f -name '*.json' -exec sh -c 'json-minify {} > {}.min && mv {}.min {}' \;
+        run: |
+          find build -type f -name '*.json' -print0 | xargs -0 -I {} sh -c '
+            content=$(cat "{}" | jq -c ".")
+            echo "$content" > "{}"
+          '
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
