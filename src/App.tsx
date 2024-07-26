@@ -157,52 +157,66 @@ export default function ToyFilterWizard() {
         });
     }, [filters, searchTerm, toys]);
 
+    const flattenOntwikkelingsdoelen = (ontwikkelingsdoelen) => {
+        if (typeof ontwikkelingsdoelen === 'string') {
+            return [ontwikkelingsdoelen];
+        }
+        if (Array.isArray(ontwikkelingsdoelen)) {
+            return ontwikkelingsdoelen;
+        }
+        if (typeof ontwikkelingsdoelen === 'object' && ontwikkelingsdoelen !== null) {
+            return Object.entries(ontwikkelingsdoelen).flatMap(([key, value]) => {
+                if (Array.isArray(value)) {
+                    return value.map(v => `${key}: ${v}`);
+                }
+                return `${key}: ${value}`;
+            });
+        }
+
+        return [];
+    };
+
     const availableOptions = useMemo(() => {
         const options = filterableColumns.reduce((acc, column) => {
+            acc[column] = [];
             if (column === 'Leeftijdsgroep') {
-                const ageOptions = new Set<string>();
-                filteredToys.forEach(toy => {
-                    if (toy[column].includes('+')) {
-                        const minAge = parseInt(toy[column]);
-                        ageRangeOptions.forEach(option => {
-                            if (getAgeValue(option) >= minAge) {
-                                ageOptions.add(option);
-                            }
-                        });
-                    } else if (toy[column].includes('-')) {
-                        const [min, max] = toy[column].split('-').map(Number);
-                        ageRangeOptions.forEach(option => {
-                            const ageValue = getAgeValue(option);
-                            if (ageValue >= min && ageValue <= max) {
-                                ageOptions.add(option);
-                            }
-                        });
-                    } else {
-                        ageOptions.add(ageRangeOptions.find(option => getAgeValue(option) === parseInt(toy[column])) || '');
-                    }
-                });
-                acc[column] = Array.from(ageOptions);
+                acc[column] = ageRangeOptions.filter(option =>
+                    filteredToys.some(toy => isAgeInRange(toy[column], option))
+                );
             } else {
-                acc[column] = [...new Set(filteredToys.map(toy => {
+                const values = filteredToys.flatMap(toy => {
                     if (column === 'Aantal spelers') {
-                        return playerOptions.find(option => isPlayerCountValid(toy[column], option));
+                        return playerOptions.find(option => isPlayerCountValid(toy[column], option)) || [];
                     }
                     if (column === 'Ontwikkelingsdoelen') {
-                        return Object.values(toy[column]).flat();
+                        return flattenOntwikkelingsdoelen(toy[column]);
                     }
-                    return toy[column];
-                }).flat())];
+                    return toy[column] || [];
+                });
+                acc[column] = [...new Set(values)].filter(Boolean);
             }
 
-            if (column !== 'Leeftijdsgroep' && column !== 'Aantal spelers') {
-                acc[column].sort((a, b) => a.localeCompare(b, 'nl', { sensitivity: 'base' }));
+            // Only sort if the array is not empty
+            if (acc[column].length > 0) {
+                if (column === 'Leeftijdsgroep') {
+                    acc[column].sort((a, b) => getAgeValue(a) - getAgeValue(b));
+                } else if (column === 'Aantal spelers') {
+                    acc[column].sort((a, b) => playerOptions.indexOf(a) - playerOptions.indexOf(b));
+                } else {
+                    acc[column].sort((a, b) => {
+                        if (typeof a === 'string' && typeof b === 'string') {
+                            return a.localeCompare(b, 'nl', { sensitivity: 'base' });
+                        }
+                        if (typeof a === 'number' && typeof b === 'number') {
+                            return a - b;
+                        }
+                        return 0;
+                    });
+                }
             }
 
             return acc;
         }, {} as Record<string, string[]>);
-
-        options['Leeftijdsgroep'].sort((a, b) => getAgeValue(a) - getAgeValue(b));
-        options['Aantal spelers'].sort((a, b) => playerOptions.indexOf(a) - playerOptions.indexOf(b));
 
         return options;
     }, [filteredToys]);
@@ -216,6 +230,7 @@ export default function ToyFilterWizard() {
         const nextColumn = filterableColumns[(currentIndex + 1) % filterableColumns.length];
         setCurrentStep(nextColumn);
     };
+
 
     const ShowResults = ({ toys }) => {
         if (!toys || toys.length === 0) {
