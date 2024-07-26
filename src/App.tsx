@@ -26,7 +26,8 @@ const playerOptions = [
     '0', '1', '2', '3', '4 of meer'
 ];
 
-const filterableColumns = ['Leeftijdsgroep', 'Aantal spelers', 'Soort speelgoed', 'Ontwikkelingsdoelen', 'Thema\'s'];
+// const filterableColumns = ['Leeftijdsgroep', 'Aantal spelers', 'Soort speelgoed', 'Ontwikkelingsdoelen', 'Thema\'s'];
+const filterableColumns = ['Leeftijdsgroep', 'Aantal spelers', 'Soort speelgoed'];
 
 const columnLabels = {
     Leeftijdsgroep: 'Leeftijd',
